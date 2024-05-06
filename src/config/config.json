@@ -1,0 +1,57 @@
+{
+  "general": [
+    {
+      "name": "host",
+      "type": {
+        "id": 3
+      },
+      "default": "localhost",
+      "comment": "Host name or IP address to run on; 0.0.0.0 means accessible from everywhere"
+    },
+    {
+      "name": "port",
+      "type": {
+        "id": 1,
+        "range": [1001, 65535]
+      },
+      "default": 9999,
+      "comment": "Port number to run on"
+    }
+  ],
+  "logging": [
+    {
+      "name": "log_level",
+      "type": {
+        "id": 0,
+        "list": ["FATAL", "ERROR", "WARNING", "INFO", "DEBUG"]
+      },
+      "default": "ERROR",
+      "comment": "How much information is emitted to log; valid values are: FATAL, ERROR, WARNING, INFO, DEBUG"
+    }
+  ],
+  "authentication": [
+    {
+      "name": "enable_hba",
+      "type": {
+        "id": 2
+      },
+      "default": false,
+      "comment": "Use host based authentication; reads allowed hosts from hba_file_path"
+    }
+  ],
+  "database": [
+
+  ],
+  "connectionPool": [
+
+  ],
+  "loadBalancing": [
+
+  ],
+  "healthCheck": [
+
+  ],
+  "replicationCheck": [
+
+  ]
+}
