@@ -71,8 +71,8 @@ target_link_libraries(${EXECUTABLE_NAME} PRIVATE
   ${Boost_LIBRARIES}
   tomlplusplus_tomlplusplus
   nlohmann_json
-  plctrl
-  plconf
+  qqctrl
+  qqconf
 )
 target_include_directories(${EXECUTABLE_NAME} PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/include

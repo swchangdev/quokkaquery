@@ -14,7 +14,7 @@ set (SOURCE_FILES
   user_input.cc
 )
 
-add_library(plconf ${SOURCE_FILES} ${HEADER_FILES})
-target_include_directories(plconf PRIVATE ${INCLUDE_PATH_CONFIG})
-target_link_libraries(plconf PRIVATE nlohmann_json tomlplusplus_tomlplusplus)
-target_link_libraries(plconf PUBLIC tomlplusplus_tomlplusplus)
+add_library(qqconf ${SOURCE_FILES} ${HEADER_FILES})
+target_include_directories(qqconf PRIVATE ${INCLUDE_PATH_CONFIG})
+target_link_libraries(qqconf PRIVATE nlohmann_json tomlplusplus_tomlplusplus)
+target_link_libraries(qqconf PUBLIC tomlplusplus_tomlplusplus)

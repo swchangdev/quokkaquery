@@ -4,12 +4,12 @@ set(SOURCE_FILES
 )
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build/test/bin)
-set(TEST_EXECUTABLE_NAME pltest_control)
+set(TEST_EXECUTABLE_NAME qqtest_control)
 add_executable(${TEST_EXECUTABLE_NAME} ${SOURCE_FILES})
 target_link_directories(${TEST_EXECUTABLE_NAME} PRIVATE ${LIBRARY_OUTPUT_PATH})
 target_link_libraries(${TEST_EXECUTABLE_NAME} PRIVATE
   gtest_main
-  plctrl
+  qqctrl
   ${Boost_LIBRARIES}
 )
 

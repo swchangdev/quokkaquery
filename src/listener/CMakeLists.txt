@@ -11,5 +11,5 @@ set(SOURCE_FILES
 )
 
 set(CONTROL_LIBRARY pllsnr)
-add_library(pllsnr ${SOURCE_FILES} ${HEADER_FILES})
-target_include_directories(pllsnr PRIVATE ${HEADER_FILE_PATH})
+add_library(qqlsnr ${SOURCE_FILES} ${HEADER_FILES})
+target_include_directories(qqlsnr PRIVATE ${HEADER_FILE_PATH})

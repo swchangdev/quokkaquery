@@ -9,5 +9,5 @@ set(SOURCE_FILES
 )
 
 set(CONTROL_LIBRARY plctrl)
-add_library(plctrl ${SOURCE_FILES} ${HEADER_FILES})
-target_include_directories(plctrl PRIVATE ${INCLUDE_PATH_CONTROL})
+add_library(qqctrl ${SOURCE_FILES} ${HEADER_FILES})
+target_include_directories(qqctrl PRIVATE ${INCLUDE_PATH_CONTROL})

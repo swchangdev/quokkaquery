@@ -37,7 +37,7 @@ def main():
   with open(json_file_path, 'r') as json_file:
     json_data = json_file.read()
     create_config_cpp_file(json_data)
-    # create_pl_toml_file(json_data)
+    # create_qq_toml_file(json_data)
 
 if __name__ == "__main__":
   main()
