@@ -10,7 +10,7 @@
 namespace config {
 class Dashboard final {
  public:
-  using TableType = std::unordered_map<ParameterDescriptor, Parameter>;
+  using TableType = std::unordered_map<ParameterDesc, Parameter>;
   using Iterator = TableType::iterator;
   using ConstIterator = TableType::const_iterator;
 
@@ -28,8 +28,8 @@ class Dashboard final {
   ConstIterator end() const noexcept;
   ConstIterator cend() const noexcept;
 
-  ConstIterator Find(const ParameterDescriptor& desc) const;
-  Iterator Find(const ParameterDescriptor& desc);
+  ConstIterator Find(const ParameterDesc& desc) const;
+  Iterator Find(const ParameterDesc& desc);
 
  private:
   std::string raw_data_;

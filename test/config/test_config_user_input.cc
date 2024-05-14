@@ -1,7 +1,4 @@
 #include <gtest/gtest.h>
-
-#include <iostream>
-
 #include "user_input.h"
 
 TEST(TestConfigUserInput, constructor) {

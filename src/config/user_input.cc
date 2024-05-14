@@ -26,7 +26,7 @@ UserInput::UserInput(toml::table&& toml_tbl)
 
     for (auto& kv : *table) {
       std::string key_name{kv.first.str()};
-      ParameterDescriptor param_desc{table_name, key_name};
+      ParameterDesc param_desc{table_name, key_name};
       toml::node_view<const toml::node> node(kv.second);
       config_tbl_.insert(std::make_pair(std::move(param_desc), std::move(node)));
     }

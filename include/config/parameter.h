@@ -1,5 +1,5 @@
-#ifndef CONFIG_PARAMETER_H_
-#define CONFIG_PARAMETER_H_
+#ifndef QQ_CONFIG_PARAMETER_H_
+#define QQ_CONFIG_PARAMETER_H_
 
 #include <memory>  /* for std::unique_ptr */
 #include <string>  /* for std::string */
@@ -84,6 +84,10 @@ class IPv4Parameter : public StringParameter {
   const bool ValidateValue(const value_type& value) const override;
 };
 
+class InvalidParameter : public FlagParameter {
+
+};
+
 struct Parameter {
   enum class TypeId : int {
     LIST = 0,
@@ -105,4 +109,4 @@ struct Parameter {
 
 }  // namespace config
 
-#endif /* CONFIG_PARAMETER_H_ */
+#endif /* QQ_CONFIG_PARAMETER_H_ */

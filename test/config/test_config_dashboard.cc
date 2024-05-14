@@ -17,7 +17,7 @@ TEST(TestConfigDashboard, find_true) {
   config::Dashboard dashboard;
   dashboard.Populate();
 
-  config::ParameterDescriptor desc{
+  config::ParameterDesc desc{
     "general",
     "port",
   };
@@ -32,7 +32,7 @@ TEST(TestConfigDashboard, find_false) {
   config::Dashboard dashboard;
   dashboard.Populate();
 
-  config::ParameterDescriptor desc{
+  config::ParameterDesc desc{
     "fake_category",
     "fake_name",
   };
@@ -45,7 +45,7 @@ TEST(TestConfigDashboard, update) {
   config::Dashboard dashboard;
   dashboard.Populate();
 
-  config::ParameterDescriptor desc{
+  config::ParameterDesc desc{
     "general",
     "port",
   };

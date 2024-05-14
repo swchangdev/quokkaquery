@@ -59,7 +59,7 @@ void Dashboard::Populate() {
     for (const auto& [index, parameter]: parameters.items()) {
       auto name = parameter["name"].template get<std::string>();
       auto type_id = parameter["type"]["id"].template get<int>();
-      ParameterDescriptor desc{category, name};
+      ParameterDesc desc{category, name};
 
       param_map_.emplace(std::make_pair(desc, std::move(CreateParameter(type_id, parameter))));
    }
@@ -94,11 +94,11 @@ Dashboard::ConstIterator Dashboard::cend() const noexcept {
   return param_map_.cend();
 }
 
-Dashboard::ConstIterator Dashboard::Find(const ParameterDescriptor& desc) const {
+Dashboard::ConstIterator Dashboard::Find(const ParameterDesc& desc) const {
   return param_map_.find(desc);
 }
 
-Dashboard::Iterator Dashboard::Find(const ParameterDescriptor& desc) {
+Dashboard::Iterator Dashboard::Find(const ParameterDesc& desc) {
   return param_map_.find(desc);
 }
 }  // namespace config
