@@ -1,13 +1,15 @@
 # Header File Setting
 set(HEADER_FILES
-  ${INCLUDE_PATH_CONNECTION}/map.h
   ${INCLUDE_PATH_CONNECTION}/connection_factory.h
+  ${INCLUDE_PATH_CONNECTION}/map.h
+  ${INCLUDE_PATH_CONNECTION}/pool.h
 )
 
 # Source File Setting
 set (SOURCE_FILES
-  map.cc
   connection_factory.cc
+  map.cc
+  pool.cc
 )
 
 set(LIBRARY_NAME qqconn)

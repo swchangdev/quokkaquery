@@ -24,7 +24,7 @@ class Map {
 
   void Resize(std::size_t new_size);
 
-  const std::size_t Insert(const ConnectionDesc&);
+  const std::size_t Insert(const ConnectionDesc&, std::shared_ptr<Connection>);
   void Delete(const ConnectionDesc&, std::size_t index);
 
   std::shared_ptr<Connection> Get(const ConnectionDesc&, std::size_t index);

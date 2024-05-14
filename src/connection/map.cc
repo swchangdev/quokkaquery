@@ -31,24 +31,24 @@ void Map::Resize(std::size_t new_size) {
   capability_ = new_size;
 }
 
-const std::size_t Map::Insert(const ConnectionDesc& desc) {
+const std::size_t Map::Insert(const ConnectionDesc& desc, std::shared_ptr<Connection> conn_ptr) {
   auto iter = conn_table_.find(desc);
 
   std::size_t conn_index = 0;
   if (iter == conn_table_.end()) {
-    conn_table_[desc].emplace_back(ConnectionFactory::GetConnection(desc));
+    conn_table_[desc].emplace_back(conn_ptr);
   } else {
     auto& array = iter->second;
     for (; conn_index < array.size(); ++conn_index) {
       auto &ptr = array[conn_index];
       if (!ptr) {
-        ptr = ConnectionFactory::GetConnection(desc);
+        ptr = conn_ptr;
         break;
       }
     }
 
     if (conn_index == array.size()) {
-      array.emplace_back(ConnectionFactory::GetConnection(desc));
+      array.emplace_back(conn_ptr);
     }
   }
 
