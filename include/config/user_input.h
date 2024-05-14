@@ -1,5 +1,5 @@
-#ifndef CONFIG_USER_INPUT_H_
-#define CONFIG_USER_INPUT_H_
+#ifndef QQ_CONFIG_USER_INPUT_H_
+#define QQ_CONFIG_USER_INPUT_H_
 
 #include <toml++/toml.h> /* for toml library */
 
@@ -12,7 +12,7 @@
 namespace config {
 class UserInput {
  public:
-  using TableType = std::unordered_map<ParameterDescriptor, toml::node_view<const toml::node>>;
+  using TableType = std::unordered_map<ParameterDesc, toml::node_view<const toml::node>>;
   using Iterator = TableType::iterator;
   using ConstIterator = TableType::const_iterator;
 
@@ -35,4 +35,4 @@ class UserInput {
   TableType config_tbl_; 
 };
 }  // namespace config
-#endif /* CONFIG_USER_INPUT_H_ */
+#endif /* QQ_CONFIG_USER_INPUT_H_ */
