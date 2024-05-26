@@ -3,6 +3,7 @@
 
 #include <string> /* for std::string */
 
+namespace quokkaquery {
 namespace config {
 struct ParameterDesc {
   const std::string category;
@@ -12,11 +13,12 @@ struct ParameterDesc {
   }
 };
 }  // namespace config
+}  // namespace quokkaquery
 
 namespace std {
 template <>
-struct hash<config::ParameterDesc> {
-  std::size_t operator()(const config::ParameterDesc& key) const {
+struct hash<quokkaquery::config::ParameterDesc> {
+  std::size_t operator()(const quokkaquery::config::ParameterDesc& key) const {
     return (std::hash<std::string>()(key.category) ^
             std::hash<std::string>()(key.name) << 1);
   }

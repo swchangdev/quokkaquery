@@ -1,9 +1,10 @@
-#ifndef QQ_CONNECTION_CONNECTION_FACTORY_H_
-#define QQ_CONNECTION_CONNECTION_FACTORY_H_
+#ifndef QQ_CP_CONNECTION_FACTORY_H_
+#define QQ_CP_CONNECTION_FACTORY_H_
 
 #include <memory>
 
-namespace conn {
+namespace quokkaquery {
+namespace cp {
 class Connection;
 struct ConnectionDesc;
 
@@ -17,5 +18,7 @@ class ConnectionFactory {
   static std::shared_ptr<Connection> GetConnection(const ConnectionDesc& conn_desc);
   static std::shared_ptr<Connection> GetInvalidConnection();
 };
-}  // namespace conn
-#endif /* QQ_CONNECTION_CONNECTION_FACTORY_H_ */
+}  // namespace cp
+}  // namespace quokkaquery
+
+#endif /* QQ_CP_CONNECTION_FACTORY_H_ */

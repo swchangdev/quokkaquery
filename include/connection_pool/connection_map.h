@@ -1,5 +1,5 @@
-#ifndef QQ_CONNECTION_MAP_H_
-#define QQ_CONNECTION_MAP_H_
+#ifndef QQ_CP_CONNECTION_MAP_H_
+#define QQ_CP_CONNECTION_MAP_H_
 
 #include <memory>        /* for std::shared_ptr */
 #include <unordered_map> /* for std::unordered_map */
@@ -7,16 +7,17 @@
 
 #include "connection_desc.h"
 
-namespace conn {
+namespace quokkaquery {
+namespace cp {
 class Connection;
 
-class Map {
+class ConnectionMap {
  public:
   using ValueType = std::vector<std::shared_ptr<Connection>>;
   using TableType = std::unordered_map<ConnectionDesc, ValueType>;
 
-  explicit Map(std::size_t pool_size);
-  ~Map() = default;
+  explicit ConnectionMap(std::size_t pool_size);
+  ~ConnectionMap() = default;
 
   const bool Empty() const;
   const std::size_t Size() const;
@@ -35,6 +36,7 @@ class Map {
   std::size_t size_;
   std::size_t capability_;
 };
+}  // namespace cp
+}  // namespace quokkaquery
 
-}  // namespace conn
-#endif /* QQ_CONNECTION_MAP_H_ */
+#endif /* QQ_CP_CONNECTION_MAP_H_ */

@@ -1,7 +1,8 @@
-#ifndef QQ_CONNECTION_CONNECTION_H_
-#define QQ_CONNECTION_CONNECTION_H_
+#ifndef QQ_CP_CONNECTION_H_
+#define QQ_CP_CONNECTION_H_
 
-namespace conn {
+namespace quokkaquery {
+namespace cp {
 struct ConnectionDesc;
 class ConnectionFactory;
 
@@ -19,6 +20,7 @@ class Connection {
 
   explicit Connection(const ConnectionDesc&) {}
 };
+}  // namespace cp
+}  // namespace quokkaquery
 
-}  // namespace conn
-#endif /* QQ_CONNECTION_CONNECTION_H_ */
+#endif /* QQ_CP_CONNECTION_H_ */

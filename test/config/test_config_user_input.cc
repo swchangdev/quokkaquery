@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "user_input.h"
 
+using namespace quokkaquery::config;
 TEST(TestConfigUserInput, constructor) {
   std::string_view sv = R"(
     [test]
@@ -8,7 +9,7 @@ TEST(TestConfigUserInput, constructor) {
   )";
 
   std::stringstream ss{ std::string{ sv } };
-  config::UserInput user_input(ss);
+  UserInput user_input(ss);
 
   const auto iter = user_input.begin();
   const auto& key = iter->first;
@@ -32,7 +33,7 @@ std::string_view sv = R"(
 
 TEST(TestConfigUserInput, for_loop) {
   std::stringstream ss{std::string{sv}};
-  config::UserInput user_input(ss);
+  UserInput user_input(ss);
   std::unordered_map<std::string, int> hit_count;
   std::unordered_map<std::string, std::string> values;
 
@@ -62,7 +63,7 @@ TEST(TestConfigUserInput, for_loop) {
 
 TEST(TestConfigUserInput, for_each) {
   std::stringstream ss{std::string{sv}};
-  config::UserInput user_input(ss);
+  UserInput user_input(ss);
   std::unordered_map<std::string, int> hit_count;
   std::unordered_map<std::string, std::string> values;
 

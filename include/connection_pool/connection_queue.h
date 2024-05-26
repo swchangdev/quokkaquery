@@ -1,5 +1,5 @@
-#ifndef QQ_CONNECTION_POOL_H_
-#define QQ_CONNECTION_POOL_H_
+#ifndef QQ_CP_CONNECTION_POOL_H_
+#define QQ_CP_CONNECTION_POOL_H_
 
 #include <deque>
 #include <future>
@@ -7,19 +7,19 @@
 
 #include "connection_desc.h"
 
-namespace conn {
+namespace quokkaquery {
+namespace cp {
 class Connection;
-
-class Pool {
+class ConnectionQueue {
  public:
   struct Entry;
 
-  using ListType = std::deque<std::unique_ptr<Entry>>;
-  using Iterator = ListType::iterator;
-  using ConstIterator = ListType::const_iterator;
+  using QueueType = std::deque<std::unique_ptr<Entry>>;
+  using Iterator = QueueType::iterator;
+  using ConstIterator = QueueType::const_iterator;
 
-  Pool() = default;
-  ~Pool() = default;
+  ConnectionQueue() = default;
+  ~ConnectionQueue() = default;
 
   const bool Empty() const;
   const std::size_t Size() const;
@@ -36,10 +36,10 @@ class Pool {
   ConstIterator cend() const;
 
  private:
-  ListType list_;
+  QueueType list_;
 };
 
-struct Pool::Entry {
+struct ConnectionQueue::Entry {
   const ConnectionDesc conn_desc;
   const std::size_t conn_map_idx;
   std::shared_ptr<Connection> conn_ptr;
@@ -52,5 +52,7 @@ struct Pool::Entry {
      conn_ptr(conn_ptr),
      worker_handle(std::move(handle)) {}
 };
-}  // namespace conn
-#endif /* QQ_CONNECTION_POOL_H_ */
+}  // namespace cp
+}  // namespace quokkaquery
+
+#endif /* QQ_CP_CONNECTION_QUEUE_H_ */

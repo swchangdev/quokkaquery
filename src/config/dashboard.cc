@@ -4,6 +4,7 @@
 
 #include "nlohmann/json.hpp"
 
+namespace quokkaquery {
 namespace config {
 static inline decltype(auto) CreateListParameter(const nlohmann::json &param_json) {
   const auto valid_list = param_json["type"]["list"].template get<std::vector<std::string>>();
@@ -102,3 +103,4 @@ Dashboard::Iterator Dashboard::Find(const ParameterDesc& desc) {
   return param_map_.find(desc);
 }
 }  // namespace config
+}  // namespace quokkaquery

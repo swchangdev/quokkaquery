@@ -1,5 +1,5 @@
-#ifndef CONFIG_DASHBOARD_H_
-#define CONFIG_DASHBOARD_H_
+#ifndef QQ_CONFIG_DASHBOARD_H_
+#define QQ_CONFIG_DASHBOARD_H_
 
 #include <string>        /* for std::string */
 #include <unordered_map> /* for std::unordered_map */
@@ -7,6 +7,7 @@
 #include "parameter.h"
 #include "parameter_desc.h"
 
+namespace quokkaquery {
 namespace config {
 class Dashboard final {
  public:
@@ -36,4 +37,6 @@ class Dashboard final {
   TableType param_map_;
 };
 }  // namespace config
-#endif /* CONFIG_CATALOG_H_ */
+}  // namespace quokkaquery
+
+#endif /* QQ_CONFIG_CATALOG_H_ */

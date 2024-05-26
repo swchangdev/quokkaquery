@@ -4,15 +4,12 @@
 #include <thread>
 #include <memory>
 
-#include "database_client.h"
+#include "database_connection.h"
 #include "mock_server.h"
 
-using namespace std::chrono_literals;
-void Sleep(const std::chrono::nanoseconds ns) {
-  std::this_thread::sleep_for(ns);
-}
-
 constexpr int DFLT_PORT_NUMBER = 65432;
+
+using namespace quokkaquery::cp;
 
 class TestConnectionDBClient : public ::testing::Test {
  protected:
@@ -32,15 +29,15 @@ class TestConnectionDBClient : public ::testing::Test {
 };
 
 TEST_F(TestConnectionDBClient, connect) {
-  conn::DatabaseDesc desc{"localhost", std::to_string(DFLT_PORT_NUMBER)};
+  DatabaseDesc desc{"localhost", std::to_string(DFLT_PORT_NUMBER)};
   EXPECT_NO_THROW(
-    conn::DatabaseClient db_client(desc);
+    DatabaseConnection db_client(desc);
   );
 }
 
 TEST_F(TestConnectionDBClient, read_and_write) {
-  conn::DatabaseDesc desc{"localhost", std::to_string(DFLT_PORT_NUMBER)};
-  conn::DatabaseClient db_client(desc);
+  DatabaseDesc desc{"localhost", std::to_string(DFLT_PORT_NUMBER)};
+  DatabaseConnection db_client(desc);
   
   auto message = std::string("Hello World!");
   db_client.Write(message);

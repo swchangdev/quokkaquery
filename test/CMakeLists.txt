@@ -9,7 +9,7 @@ function(include_path suffix)
 endfunction()
 
 include_path(config)
-include_path(connection)
+include_path(connection_pool)
 
 add_subdirectory(config)
-add_subdirectory(connection)
+add_subdirectory(connection_pool)

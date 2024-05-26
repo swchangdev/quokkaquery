@@ -1,37 +1,38 @@
-#include "map.h"
+#include "connection_map.h"
 
 #include "connection_desc.h"
 #include "connection_factory.h"
 
-namespace conn {
+namespace quokkaquery {
+namespace cp {
 static inline const bool CheckOccupied(std::shared_ptr<Connection> ptr) {
   /* Unoccupied only if it's referenced by map and pool */
   return !ptr && (ptr.use_count() > 2);
 }
 
-Map::Map(std::size_t pool_size)
+ConnectionMap::ConnectionMap(std::size_t pool_size)
  : conn_table_(pool_size), 
    size_(0),
    capability_(pool_size) {}
 
-const bool Map::Empty() const {
+const bool ConnectionMap::Empty() const {
   return size_ == 0;
 }
 
-const std::size_t Map::Size() const {
+const std::size_t ConnectionMap::Size() const {
   return size_;
 }
 
-const std::size_t Map::Capability() const {
+const std::size_t ConnectionMap::Capability() const {
   return capability_;
 }
 
-void Map::Resize(std::size_t new_size) {
+void ConnectionMap::Resize(std::size_t new_size) {
   conn_table_.rehash(new_size);
   capability_ = new_size;
 }
 
-const std::size_t Map::Insert(const ConnectionDesc& desc, std::shared_ptr<Connection> conn_ptr) {
+const std::size_t ConnectionMap::Insert(const ConnectionDesc& desc, std::shared_ptr<Connection> conn_ptr) {
   auto iter = conn_table_.find(desc);
 
   std::size_t conn_index = 0;
@@ -57,7 +58,7 @@ const std::size_t Map::Insert(const ConnectionDesc& desc, std::shared_ptr<Connec
   return conn_index;
 }
 
-void Map::Delete(const ConnectionDesc& desc, std::size_t index) {
+void ConnectionMap::Delete(const ConnectionDesc& desc, std::size_t index) {
   auto iter = conn_table_.find(desc);
   auto& conn = iter->second[index];
 
@@ -65,7 +66,7 @@ void Map::Delete(const ConnectionDesc& desc, std::size_t index) {
   --size_;
 }
 
-std::shared_ptr<Connection> Map::Get(const ConnectionDesc& desc, std::size_t index) {
+std::shared_ptr<Connection> ConnectionMap::Get(const ConnectionDesc& desc, std::size_t index) {
   auto iter = conn_table_.find(desc);
 
   if (iter == conn_table_.end()) {
@@ -80,7 +81,7 @@ std::shared_ptr<Connection> Map::Get(const ConnectionDesc& desc, std::size_t ind
   return array[index];
 }
 
-std::shared_ptr<Connection> Map::Reuse(const ConnectionDesc& desc) {
+std::shared_ptr<Connection> ConnectionMap::Reuse(const ConnectionDesc& desc) {
   auto iter = conn_table_.find(desc);
   if (iter == conn_table_.end()) {
     return ConnectionFactory::GetInvalidConnection();
@@ -96,5 +97,5 @@ std::shared_ptr<Connection> Map::Reuse(const ConnectionDesc& desc) {
 
   return conn_ptr;
 }
-
-}  // namespace conn
+}  // namespace cp
+}  // namespace quokkaquery

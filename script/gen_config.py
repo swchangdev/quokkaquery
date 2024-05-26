@@ -20,9 +20,11 @@ static const char* raw_data = R"(
 {json_data}
 )";
 
+namespace quokkaquery {{
 namespace config {{
 Dashboard::Dashboard() : raw_data_(raw_data) {{}}
 }}  // namespace config
+}}  // namespace quokkaquery
 """
 
   cpp_file_path = os.path.join(get_config_dir_path(), 'dashboard_autogen.cc')

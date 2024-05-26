@@ -1,5 +1,6 @@
 #include "parameter.h"
 
+namespace quokkaquery {
 namespace config {
 ListParameter::ListParameter(const ListParameter::value_type& value,
                              const ListParameter::list_type& valid_list)
@@ -51,3 +52,4 @@ const bool IPv4Parameter::ValidateValue(const value_type& value) const {
   return true;
 }
 }  // namespace config
+}  // namespace quokkaquery
