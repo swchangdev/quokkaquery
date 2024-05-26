@@ -12,13 +12,9 @@ TEST(TestConnectionQueue, constructor) {
 }
 
 TEST(TestConnectionQueue, insert) {
-  ConnectionDesc conn_desc {
-    "dbname",
-    "username",
-    ""
-  };
-
+  ConnectionDesc conn_desc{"dbname", "username", "parameter"};
   ConnectionQueue queue;
+
   auto iter = queue.Insert(std::make_unique<ConnectionQueue::Entry>(
     conn_desc,
     0,
@@ -27,18 +23,15 @@ TEST(TestConnectionQueue, insert) {
   ));
 
   auto& ptr = *iter;
-  EXPECT_EQ(ptr->conn_desc, conn_desc);
+
+  std::equal_to<ConnectionDesc> compare;
+  EXPECT_TRUE(compare(conn_desc, ptr->conn_desc));
   EXPECT_EQ(ptr->conn_map_idx, 0);
   EXPECT_TRUE(ptr->conn_ptr != nullptr);
 }
 
 TEST(TestConnectionQueue, pop) {
-  ConnectionDesc conn_desc {
-    "dbname",
-    "username",
-    ""
-  };
-
+  ConnectionDesc conn_desc{"dbname", "username", "parameter"};
   ConnectionQueue queue;
   auto iter = queue.Insert(std::make_unique<ConnectionQueue::Entry>(
     conn_desc,

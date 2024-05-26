@@ -13,7 +13,7 @@ TEST(TestConnectionMap, constructor) {
 
 TEST(TestConnectionMap, insert) {
   ConnectionMap map(100);
-  ConnectionDesc conn_desc("dbname", "username", "parameter");
+  ConnectionDesc conn_desc{"dbname", "username", "parameter"};
   auto idx = map.Insert(conn_desc, ConnectionFactory::GetConnection(conn_desc));
 
   EXPECT_FALSE(map.Empty());
@@ -23,7 +23,7 @@ TEST(TestConnectionMap, insert) {
 
 TEST(TestConnectionMap, insert_many) {
   ConnectionMap map(100);
-  ConnectionDesc conn_desc("dbname", "username", "parameter");
+  ConnectionDesc conn_desc{"dbname", "username", "parameter"};
 
   map.Insert(conn_desc, ConnectionFactory::GetConnection(conn_desc));
   map.Insert(conn_desc, ConnectionFactory::GetConnection(conn_desc));
@@ -35,7 +35,7 @@ TEST(TestConnectionMap, insert_many) {
 
 TEST(TestConnectionMap, resize) {
   ConnectionMap map(5);
-  ConnectionDesc conn_desc("dbname", "username", "parameter");
+  ConnectionDesc conn_desc{"dbname", "username", "parameter"};
 
   map.Insert(conn_desc, ConnectionFactory::GetConnection(conn_desc));
   map.Insert(conn_desc, ConnectionFactory::GetConnection(conn_desc));
@@ -55,7 +55,7 @@ TEST(TestConnectionMap, resize) {
 
 TEST(TestConnectionMap, delete_conn) {
   ConnectionMap map(100);
-  ConnectionDesc conn_desc("dbname", "username", "parameter");
+  ConnectionDesc conn_desc{"dbname", "username", "parameter"};
 
   map.Insert(conn_desc, ConnectionFactory::GetConnection(conn_desc));
   auto idx = map.Insert(conn_desc, ConnectionFactory::GetConnection(conn_desc));
@@ -71,7 +71,7 @@ TEST(TestConnectionMap, delete_conn) {
 
 TEST(TestConnectionMap, reuse) {
   ConnectionMap map(100);
-  ConnectionDesc conn_desc("dbname", "username", "parameter");
+  ConnectionDesc conn_desc{"dbname", "username", "parameter"};
 
   auto idx1 = map.Insert(conn_desc, ConnectionFactory::GetConnection(conn_desc));
   auto idx2 = map.Insert(conn_desc, ConnectionFactory::GetConnection(conn_desc));

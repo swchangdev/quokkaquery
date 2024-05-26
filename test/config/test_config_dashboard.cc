@@ -19,10 +19,7 @@ TEST(TestConfigDashboard, find_true) {
   Dashboard dashboard;
   dashboard.Populate();
 
-  ParameterDesc desc{
-    "general",
-    "port",
-  };
+  ParameterDesc desc{"general", "port"};
   auto found = dashboard.Find(desc);
   EXPECT_EQ(found->second.type, Parameter::TypeId::RANGE);
   
@@ -34,10 +31,7 @@ TEST(TestConfigDashboard, find_false) {
   Dashboard dashboard;
   dashboard.Populate();
 
-  ParameterDesc desc{
-    "fake_category",
-    "fake_name",
-  };
+  ParameterDesc desc{"fake_category", "fake_name"};
 
   auto found = dashboard.Find(desc);
   EXPECT_EQ(found, dashboard.end());
@@ -47,10 +41,7 @@ TEST(TestConfigDashboard, update) {
   Dashboard dashboard;
   dashboard.Populate();
 
-  ParameterDesc desc{
-    "general",
-    "port",
-  };
+  ParameterDesc desc{"general", "port"};
   
   auto first_found = dashboard.Find(desc);
   std::get<RangeParameter>(*first_found->second.value).Set(9998);
