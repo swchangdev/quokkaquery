@@ -6,6 +6,7 @@
 #include <variant> /* for std::variant */
 #include <vector>  /* for std::vector */
 
+namespace quokkaquery {
 namespace config {
 template <typename T>
 class ParameterBase {
@@ -106,7 +107,7 @@ struct Parameter {
   TypeId type;
   std::unique_ptr<Value> value;
 };
-
 }  // namespace config
+}  // namespace quokkaquery
 
 #endif /* QQ_CONFIG_PARAMETER_H_ */

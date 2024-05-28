@@ -2,6 +2,7 @@
 
 #include <filesystem>
 
+namespace quokkaquery {
 namespace config {
 static inline decltype(auto) GetTomlTbl(const std::string& file_path) {
   auto cann_path = std::filesystem::weakly_canonical(file_path);
@@ -58,3 +59,4 @@ UserInput::ConstIterator UserInput::cend() const noexcept {
 }
 
 }  // namespace config
+}  // namespace quokkaquery

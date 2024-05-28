@@ -4,7 +4,6 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <memory>
-#include <iomanip>
 #include <vector>
 #include <chrono>
 
@@ -15,21 +14,21 @@ class MockConnection : public std::enable_shared_from_this<MockConnection> {
  public:
   using Pointer = std::shared_ptr<MockConnection>;
 
-  static Pointer Create(boost::asio::io_context& io_context) {
-    return Pointer(new MockConnection(io_context));
+  ~MockConnection() {
+    socket_.close();
+  }
+
+  static Pointer Create(tcp::socket&& socket) {
+    return Pointer(new MockConnection(std::move(socket)));
   } 
 
   void Start() {
     Read();
   }
 
-  tcp::socket& Socket() {
-    return socket_;
-  }
-
  private:
-  MockConnection(boost::asio::io_context& io_context)
-   : socket_(io_context),
+  MockConnection(tcp::socket&& socket)
+   : socket_(std::move(socket)),
      read_buffer_(READ_BUFFER_MAX_SIZE) {}
 
   void Read() {
@@ -66,24 +65,16 @@ class MockServer {
  public:
   using TimePoint = std::chrono::time_point<std::chrono::steady_clock>;
 
-  explicit MockServer(const int port_number)
-   : io_context_(),
-     acceptor_(io_context_, tcp::endpoint(tcp::v4(), port_number)),
-     time_points_() {
+  MockServer(boost::asio::io_context& io_context, const int port_number)
+      : acceptor_(io_context, tcp::endpoint(tcp::v4(), port_number)),
+        time_points_() {
     StartAccept();
   }
 
-  void Run() {
-    io_context_.run();
-  }
-
   void Stop() {
-    for (auto &conn : connections_) {
-      conn->Socket().close();
-    }
     connections_.clear();
     time_points_.clear();
-    io_context_.stop();
+    acceptor_.close();
   }
 
   const std::vector<TimePoint>& GetAcceptedRecord() const {
@@ -92,23 +83,17 @@ class MockServer {
 
  private:
   void StartAccept() {
-    auto new_connection = MockConnection::Create(io_context_);
     acceptor_.async_accept(
-      new_connection->Socket(), 
-      boost::bind(&MockServer::HandleAccept, this, new_connection,
-                  boost::asio::placeholders::error)
-    );
+        [this](boost::system::error_code ec, tcp::socket socket) {
+          if (!ec) {
+            auto conn = MockConnection::Create(std::move(socket));
+            time_points_.emplace_back(std::chrono::steady_clock::now());
+            connections_.emplace_back(conn);
+            conn->Start();
+          }
+        });
   }
 
-  void HandleAccept(MockConnection::Pointer conn, const boost::system::error_code& error) {
-    if (!error) {
-      time_points_.emplace_back(std::chrono::steady_clock::now());
-      connections_.emplace_back(conn);
-      conn->Start();
-    }
-  }
-
-  boost::asio::io_context io_context_;
   tcp::acceptor acceptor_;
   std::vector<TimePoint> time_points_;
   std::vector<MockConnection::Pointer> connections_;

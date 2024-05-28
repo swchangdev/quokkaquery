@@ -9,6 +9,7 @@
 
 #include "parameter_desc.h"
 
+namespace quokkaquery {
 namespace config {
 class UserInput {
  public:
@@ -35,4 +36,6 @@ class UserInput {
   TableType config_tbl_; 
 };
 }  // namespace config
+}  // namespace quokkaquery
+
 #endif /* QQ_CONFIG_USER_INPUT_H_ */

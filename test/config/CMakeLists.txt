@@ -5,7 +5,7 @@ set(SOURCE_FILES
 )
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build/test/bin)
-set(TEST_EXECUTABLE_NAME qqtest_config)
+set(TEST_EXECUTABLE_NAME qqtest_conf)
 add_executable(${TEST_EXECUTABLE_NAME} ${SOURCE_FILES})
 target_link_directories(${TEST_EXECUTABLE_NAME} PRIVATE ${LIBRARY_OUTPUT_PATH})
 target_link_libraries(${TEST_EXECUTABLE_NAME} PRIVATE
