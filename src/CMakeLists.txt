@@ -9,7 +9,7 @@ function(include_path suffix)
 endfunction()
 
 include_path(config)
-include_path(connection_pool)
+include_path(protocol)
 
 # Executable Linking
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build/bin)
@@ -22,11 +22,11 @@ target_link_libraries(${EXECUTABLE_NAME} PRIVATE
   tomlplusplus_tomlplusplus
   nlohmann_json
   qqconf
-  qqcp
+  qqproto
 )
 target_include_directories(${EXECUTABLE_NAME} PRIVATE
   ${PROJECT_SOURCE_DIR}/include
 )
 
 add_subdirectory(config)
-add_subdirectory(connection_pool)
+add_subdirectory(protocol)

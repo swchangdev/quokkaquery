@@ -1,23 +1,23 @@
-#ifndef QQ_CP_CONNECTION_DESC_H_
-#define QQ_CP_CONNECTION_DESC_H_
+#ifndef QQ_PROTOCOL_CONNECTION_DESC_H_
+#define QQ_PROTOCOL_CONNECTION_DESC_H_
 
 #include <string>
 
 namespace quokkaquery {
-namespace cp {
+namespace protocol {
 struct ConnectionDesc {
   const std::string dbname;
   const std::string username;
   const std::string parameter; /* name=value[&...] */
 };
 
-}  // namespace cp
+}  // namespace protocol
 }  // namespace quokkaquery
 
 namespace std {
 template <>
-struct hash<quokkaquery::cp::ConnectionDesc> {
-  using T = quokkaquery::cp::ConnectionDesc;
+struct hash<quokkaquery::protocol::ConnectionDesc> {
+  using T = quokkaquery::protocol::ConnectionDesc;
   std::size_t operator()(const T& key) const {
     return (std::hash<std::string>()(key.dbname)) ^
            (std::hash<std::string>()(key.username) << 1) ^
@@ -26,8 +26,8 @@ struct hash<quokkaquery::cp::ConnectionDesc> {
 };
 
 template <>
-struct equal_to<quokkaquery::cp::ConnectionDesc> {
-  using T = quokkaquery::cp::ConnectionDesc;
+struct equal_to<quokkaquery::protocol::ConnectionDesc> {
+  using T = quokkaquery::protocol::ConnectionDesc;
   bool operator()(const T& lhs, const T& rhs) const {
     return (lhs.dbname.compare(rhs.dbname) == 0) &&
            (lhs.username.compare(rhs.username) == 0) &&
@@ -36,4 +36,4 @@ struct equal_to<quokkaquery::cp::ConnectionDesc> {
 };
 }  // namespace std
 
-#endif /* QQ_CP_CONNECTION_DESC_H_ */
+#endif /* QQ_PROTOCOL_CONNECTION_DESC_H_ */
