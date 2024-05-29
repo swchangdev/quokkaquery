@@ -1,7 +1,7 @@
 #ifndef QQ_PROTOCOL_CONNECTION_DESC_H_
 #define QQ_PROTOCOL_CONNECTION_DESC_H_
 
-#include <string>
+#include <string> /* for std::string */
 
 namespace quokkaquery {
 namespace protocol {

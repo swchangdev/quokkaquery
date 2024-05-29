@@ -29,12 +29,18 @@ TEST(TestConnectionPool, emplace) {
 
 TEST(TestConnectionPool, too_many_emplace) {
   ConnectionPool pool(DFLT_CONNECTION_POOL_SIZE);
-  ConnectionDesc conn_desc{"dbname", "username", "parameter"};
+  ConnectionDesc conn_desc1{"dbname", "username", "parameter1"};
+  ConnectionDesc conn_desc2{"dbname", "username", "parameter2"};
 
-  pool.Emplace(conn_desc);
-  EXPECT_ANY_THROW(
-    pool.Emplace(conn_desc);
-  );
+  pool.Emplace(conn_desc1);
+  pool.Emplace(conn_desc2);  // conn_desc1 is invalidated
+
+  auto conn1 = pool.Reuse(conn_desc1);
+  auto conn2 = pool.Reuse(conn_desc2);
+
+  EXPECT_FALSE(conn1);
+  EXPECT_TRUE(conn2);
+  EXPECT_EQ(pool.Size(), 1);
 }
 
 TEST(TestConnectionPool, reuse) {
@@ -62,43 +68,28 @@ TEST(TestConnectionPool, reuse_invalid) {
   EXPECT_EQ(reused, nullptr);
 }
 
-TEST(TestConnectionPool, reuse_or_emplace) {
-  ConnectionPool pool(DFLT_CONNECTION_POOL_SIZE);
-  ConnectionDesc conn_desc{"dbname", "username", "parameter1"};
-
-  auto emplaced = pool.ReuseOrEmplace(conn_desc);
-  auto reused = pool.ReuseOrEmplace(conn_desc);
-
-  EXPECT_EQ(emplaced.get(), reused.get());
-  
-  std::equal_to<ConnectionDesc> compare;
-  EXPECT_TRUE(compare(emplaced->locator.conn_desc, reused->locator.conn_desc));
-  EXPECT_EQ(emplaced->locator.npos, reused->locator.npos);
-}
-
 TEST(TestConnectionPool, resize) {
   ConnectionPool pool(DFLT_CONNECTION_POOL_SIZE);
-  ConnectionDesc conn_desc{"dbname", "username", "parameter1"};
+  ConnectionDesc conn_desc{"dbname", "username", "parameter"};
   
   pool.Emplace(conn_desc);
   pool.Resize(2*DFLT_CONNECTION_POOL_SIZE);
 
-  ConnectionPool::ConnectionHandlePtr conn_ptr;
-  EXPECT_NO_THROW(
-    conn_ptr = pool.Emplace(conn_desc);
-  );
+  auto conn_ptr = pool.Emplace(conn_desc);
 
   EXPECT_EQ(conn_ptr->locator.npos, 1);
+  EXPECT_EQ(pool.Size(), 2);
 }
 
-TEST(TestConnectionPool, get) {
-  ConnectionPool pool(DFLT_CONNECTION_POOL_SIZE);
-  ConnectionDesc conn_desc{"dbname", "username", "parameter1"};
+TEST(TestConnectionPool, invalidate_all) {
+  ConnectionPool pool(4 * DFLT_CONNECTION_POOL_SIZE);
 
-  auto emplaced = pool.Emplace(conn_desc);
-  auto get = pool.Get(ConnectionHandle::Locator{conn_desc, 0});
+  pool.Emplace(ConnectionDesc{"dbname", "username", "parameter1"});
+  pool.Emplace(ConnectionDesc{"dbname", "username", "parameter2"});
+  pool.Emplace(ConnectionDesc{"dbname", "username", "parameter3"});
+  pool.Emplace(ConnectionDesc{"dbname", "username", "parameter4"});
 
-  std::equal_to<ConnectionDesc> compare;
-  EXPECT_TRUE(compare(emplaced->locator.conn_desc, get->locator.conn_desc));
-  EXPECT_EQ(emplaced->locator.npos, get->locator.npos);
+  pool.Invalidate();
+
+  EXPECT_TRUE(pool.Empty());
 }

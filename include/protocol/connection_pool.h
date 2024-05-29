@@ -1,9 +1,10 @@
 #ifndef QQ_PROTOCOL_CONNECTION_POOL_H_
 #define QQ_PROTOCOL_CONNECTION_POOL_H_
 
-#include <deque>         /* for std::deque */
+#include <list>          /* for std::list */
 #include <memory>        /* for std::shared_ptr */
 #include <unordered_map> /* for std::unordered_map */
+#include <utility>       /* for std::pair */
 #include <vector>        /* for std::vector */
 
 #include "connection_desc.h"
@@ -14,9 +15,9 @@ namespace protocol {
 class ConnectionPool {
  public:
   using ConnectionHandlePtr = std::shared_ptr<ConnectionHandle>;
-  using ConnectionHandlePtrs = std::vector<ConnectionHandlePtr>;
-  using Map = std::unordered_map<ConnectionDesc, ConnectionHandlePtrs>;
-  using Queue = std::deque<ConnectionHandlePtr>;
+  using List = std::list<ConnectionHandlePtr>;
+  using MapValue = std::pair<std::vector<List::iterator>, std::size_t>;
+  using Map = std::unordered_map<ConnectionDesc, MapValue>;
 
   explicit ConnectionPool(std::size_t pool_size);
   ~ConnectionPool();
@@ -29,19 +30,22 @@ class ConnectionPool {
 
   ConnectionHandlePtr Emplace(const ConnectionDesc&);
   ConnectionHandlePtr Reuse(const ConnectionDesc&);
-  ConnectionHandlePtr ReuseOrEmplace(const ConnectionDesc&);
-  ConnectionHandlePtr Get(ConnectionHandle::Locator);
 
-  void Invalidate(const ConnectionHandle::Locator&);
-  void Invalidate(const ConnectionDesc&);
   void Invalidate();
 
  private:
+  bool Contains(const ConnectionDesc&);
+  void EmplaceEmptyContainer(const ConnectionDesc&);
+  const std::size_t GetAvailableSlot(const ConnectionDesc&);
+
+  ConnectionHandlePtr EmplaceInternal(const ConnectionDesc&, const std::size_t);
+  ConnectionHandlePtr ReuseInternal(const ConnectionDesc&);
+  
   void InvalidateLRU();
-  ConnectionHandlePtr EmplaceInternal(const ConnectionDesc&, const std::size_t npos);
+  void InvalidateInternal(ConnectionHandle::Locator);
 
   Map map_;
-  Queue lru_list_;
+  List lru_list_;
   std::size_t size_;
   std::size_t capability_;
 };

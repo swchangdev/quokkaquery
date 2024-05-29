@@ -1,8 +1,9 @@
 #include "dashboard.h"
 
-#include <memory>
+#include <memory>  /* for std::unique_ptr */
+#include <utility> /* for std::make_pair */
 
-#include "nlohmann/json.hpp"
+#include "nlohmann/json.hpp" /* for json library */
 
 namespace quokkaquery {
 namespace config {
