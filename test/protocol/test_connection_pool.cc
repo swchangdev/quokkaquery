@@ -68,20 +68,6 @@ TEST(TestConnectionPool, reuse_invalid) {
   EXPECT_EQ(reused, nullptr);
 }
 
-TEST(TestConnectionPool, reuse_or_emplace) {
-  ConnectionPool pool(DFLT_CONNECTION_POOL_SIZE);
-  ConnectionDesc conn_desc{"dbname", "username", "parameter"};
-
-  auto emplaced = pool.ReuseOrEmplace(conn_desc);
-  auto reused = pool.ReuseOrEmplace(conn_desc);
-
-  EXPECT_EQ(emplaced.get(), reused.get());
-  
-  std::equal_to<ConnectionDesc> compare;
-  EXPECT_TRUE(compare(emplaced->locator.conn_desc, reused->locator.conn_desc));
-  EXPECT_EQ(emplaced->locator.npos, reused->locator.npos);
-}
-
 TEST(TestConnectionPool, resize) {
   ConnectionPool pool(DFLT_CONNECTION_POOL_SIZE);
   ConnectionDesc conn_desc{"dbname", "username", "parameter"};

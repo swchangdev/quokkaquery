@@ -1,6 +1,6 @@
 #include "user_input.h"
 
-#include <filesystem>
+#include <filesystem> /* for std::filesystem::weakly_canonical */
 
 namespace quokkaquery {
 namespace config {

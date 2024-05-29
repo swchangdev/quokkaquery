@@ -1,10 +1,8 @@
 #ifndef QQ_PROTOCOL_CONNECTION_H_
 #define QQ_PROTOCOL_CONNECTION_H_
 
-#include <boost/asio.hpp>
-#include <vector>
-#include <string>
-#include <memory>
+#include <boost/asio.hpp> /* for boost asio library */
+#include <vector>         /* for std::vector */
 
 namespace quokkaquery {
 namespace protocol {

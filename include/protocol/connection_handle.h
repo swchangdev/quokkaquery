@@ -1,10 +1,9 @@
 #ifndef QQ_PROTOCOL_CONNECTION_HANDLE_H_
 #define QQ_PROTOCOL_CONNECTION_HANDLE_H_
 
-#include <future>
-#include <memory>
-#include <string>
-#include <vector>
+#include <future> /* for std::future */
+#include <memory> /* for std::unique_ptr */
+#include <vector> /* for std::vector */
 
 #include "connection.h"
 

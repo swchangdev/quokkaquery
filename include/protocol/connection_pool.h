@@ -30,13 +30,17 @@ class ConnectionPool {
 
   ConnectionHandlePtr Emplace(const ConnectionDesc&);
   ConnectionHandlePtr Reuse(const ConnectionDesc&);
-  ConnectionHandlePtr ReuseOrEmplace(const ConnectionDesc&);
 
   void Invalidate();
 
  private:
-  ConnectionHandlePtr EmplaceInternal(const ConnectionDesc&);
+  bool Contains(const ConnectionDesc&);
+  void EmplaceEmptyContainer(const ConnectionDesc&);
+  const std::size_t GetAvailableSlot(const ConnectionDesc&);
+
+  ConnectionHandlePtr EmplaceInternal(const ConnectionDesc&, const std::size_t);
   ConnectionHandlePtr ReuseInternal(const ConnectionDesc&);
+  
   void InvalidateLRU();
   void InvalidateInternal(ConnectionHandle::Locator);
 

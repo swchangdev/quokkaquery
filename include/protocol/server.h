@@ -1,8 +1,7 @@
 #ifndef QQ_PROTOCOL_SERVER_H_
 #define QQ_PROTOCOL_SERVER_H_
 
-#include <boost/asio.hpp>
-#include <boost/bind.hpp>
+#include <boost/asio.hpp> /* for boost asio library */
 
 namespace quokkaquery {
 namespace protocol {

@@ -1,6 +1,5 @@
 #include "connection_pool.h"
 
-#include <cassert>
 #include "connection_desc.h"
 
 namespace quokkaquery {
@@ -22,7 +21,7 @@ static inline std::vector<ConnectionList::iterator>& Array(ConnectionMap::iterat
   return iter->second.first;
 }
 
-static inline std::size_t& RealArraySize(ConnectionPool::Map::iterator iter) {
+static inline std::size_t& ActiveConnCount(ConnectionPool::Map::iterator iter) {
   return iter->second.second;
 }
 
@@ -60,24 +59,19 @@ ConnectionHandlePtr ConnectionPool::Emplace(const ConnectionDesc& desc) {
     InvalidateLRU();
   }
 
-  return EmplaceInternal(desc);
+  if (!Contains(desc)) {
+    EmplaceEmptyContainer(desc);
+  }
+
+  return EmplaceInternal(desc, GetAvailableSlot(desc));
 }
 
 ConnectionHandlePtr ConnectionPool::Reuse(const ConnectionDesc& desc) {
-  if (!map_.contains(desc)) {
+  if (!Contains(desc)) {
     return InvalidConnHandlePtr();
   }
 
   return ReuseInternal(desc);
-
-}
-
-ConnectionHandlePtr ConnectionPool::ReuseOrEmplace(const ConnectionDesc& desc) {
-  if (!map_.contains(desc)) {
-    return EmplaceInternal(desc);
-  }
-
-  return Reuse(desc);
 }
 
 void ConnectionPool::Invalidate() {
@@ -85,25 +79,38 @@ void ConnectionPool::Invalidate() {
   map_.clear();
 }
 
-ConnectionHandlePtr ConnectionPool::EmplaceInternal(const ConnectionDesc& desc) {
-  if (!map_.contains(desc)) {
-    map_.emplace(std::make_pair(desc, std::make_pair(std::vector<List::iterator>{}, 0)));
-  }
+bool ConnectionPool::Contains(const ConnectionDesc& desc) {
+  return map_.contains(desc);
+}
 
-  auto iter = map_.find(desc);
-  auto& array = Array(iter);
+void ConnectionPool::EmplaceEmptyContainer(const ConnectionDesc& desc) {
+  map_.emplace(std::make_pair(desc, std::make_pair(std::vector<List::iterator>{}, 0)));
+}
+
+const std::size_t ConnectionPool::GetAvailableSlot(const ConnectionDesc& desc) {
+  auto& array = Array(map_.find(desc));
+
   std::size_t npos = 0;
   for (; npos < array.size(); ++npos) {
     if (array[npos] == lru_list_.end()) {
-      lru_list_.emplace_front(std::make_shared<ConnectionHandle>(desc, npos));
-      array[npos] = lru_list_.begin();
+      break;
     }
   }
 
-  lru_list_.emplace_front(std::make_shared<ConnectionHandle>(desc, npos));
-  array.emplace_back(lru_list_.begin());
+  return npos;
+}
 
-  ++RealArraySize(iter);
+ConnectionHandlePtr ConnectionPool::EmplaceInternal(const ConnectionDesc& desc,
+                                                    const std::size_t npos) {
+  assert(Contains(desc));
+
+  auto iter = map_.find(desc);
+  auto& array = Array(iter);
+
+  lru_list_.emplace_front(std::make_shared<ConnectionHandle>(desc, npos));
+  array.emplace(array.begin() + npos, lru_list_.begin());
+
+  ++ActiveConnCount(iter);
   ++size_;
 
   return lru_list_.front();
@@ -116,11 +123,14 @@ ConnectionHandlePtr ConnectionPool::ReuseInternal(const ConnectionDesc& desc) {
   for (auto& lru_list_iter : Array(iter)) {
     auto& ptr = *lru_list_iter;
     if (!CheckOccupied(ptr)) {
-      lru_list_.erase(lru_list_iter);
+      auto tmp = lru_list_iter;
+
       lru_list_.push_front(ptr);
       lru_list_iter = lru_list_.begin();
+      lru_list_.erase(tmp);
       
       conn_ptr = ptr;
+      break;
     }
   }
 
@@ -146,16 +156,14 @@ void ConnectionPool::InvalidateInternal(ConnectionHandle::Locator locator) {
   auto& array = Array(iter);
   auto& lru_list_iter = array[locator.npos];
 
-  if (lru_list_iter == lru_list_.end()) {
-    return;
-  }
+  assert (lru_list_iter != lru_list_.end());
 
   lru_list_.erase(lru_list_iter);
   lru_list_iter = lru_list_.end();
-  --RealArraySize(iter);
+  --ActiveConnCount(iter);
   --size_;
 
-  if (RealArraySize(iter) == 0) {
+  if (ActiveConnCount(iter) == 0) {
     array.clear();
   }
 }
